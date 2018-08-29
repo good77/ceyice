@@ -81,7 +81,7 @@ import CopyRight from '@/components/Copyright'
         methods:{
             send(){
                 var data = {
-                    sid:14,
+                    sid:this.sid,
                     answer:this.answer
                 }
                 console.log(data)                
@@ -91,6 +91,7 @@ import CopyRight from '@/components/Copyright'
                     params:data,
                 }).then(res=>{
                     console.log(res.data)
+                    window.localStorage.setItem('res',JSON.stringify(res.data));
                 })
                 var type = this.$route.query.type 
                 if(type==1){
@@ -170,11 +171,12 @@ import CopyRight from '@/components/Copyright'
             }
         },
         mounted(){
+            this.sid = this.$route.query.sid
             this.timer = setInterval(()=>{
                 this.time++;
             },1000)
             var data = {
-                sid : 14
+                sid : this.sid
             }
             this.$axios({
                 method:'get',

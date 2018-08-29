@@ -1,26 +1,18 @@
 <template>
     <div class="all">
-        <div class='item'>
+        <div class='item'  v-for="(item,index,key) in res.vote" :key="key">
             <div class="choice">
                 <div class="title">
-                    <span class='num'>1</span><span class='titletext'>这里是单选题的标题</span>
+                    <span class='num'>{{index+1}}</span><span class='titletext'>{{item.topic_title.title}}</span>
                 </div>
                 <ul class="content">
-                    <li>
+                    <li v-for="(option) in item.option">
                         <span class='contenttext'>A. 这里是选项1<span class='ratio'>60% 1004人</span></span>
                         <div class="progress">
                             <div class="progressInner" :style="'width:'+hahaha+'%'">
 
                             </div>
                         </div>
-                    </li>
-                    <li>
-                        <span class='contenttext'>B. 这里是选项2</span>
-                        <div class="progress"></div>
-                    </li>
-                    <li>
-                        <span class='contenttext'>C. 这里是选项3</span>
-                        <div class="progress"></div>
                     </li>
                 </ul>
             </div>
@@ -31,8 +23,12 @@
     export default{
         data(){
             return {
-                hahaha:60
+                hahaha:60,
+                res:JSON.parse(window.localStorage.getItem('res'))
             }
+        },
+        mounted(){
+            console.log(this.res)
         }
     }
 </script>

@@ -28,12 +28,13 @@ import CopyRight from '@/components/Copyright'
             return {
                 min:parseInt(window.localStorage.getItem('time')/60),
                 sec:window.localStorage.getItem('time')%60,
-                point:0
+                point:0,
+                res:JSON.parse(window.localStorage.getItem("res"))
             }
         },
         mounted(){
             var timer2 = setInterval(()=>{
-                if(this.point<95){
+                if(this.point<this.res.score){
                     this.point ++;
                 }else{
                     window.clearInterval(timer2);
