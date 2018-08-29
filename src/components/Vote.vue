@@ -1,15 +1,15 @@
 <template>
     <div class="all">
         <div class='item'  v-for="(item,index,key) in res.vote" :key="key">
-            <div class="choice">
+            <div class="choice" v-if="item.topic_title.bool_single==1||item.topic_title.bool_single==2">
                 <div class="title">
                     <span class='num'>{{index+1}}</span><span class='titletext'>{{item.topic_title.title}}</span>
                 </div>
                 <ul class="content">
-                    <li v-for="(option) in item.option">
-                        <span class='contenttext'>A. 这里是选项1<span class='ratio'>60% 1004人</span></span>
+                    <li v-for="(option,key) in item.option" :key=key>
+                        <span class='contenttext'>A. {{option.res_option}}<span class='ratio'>{{(option.result_select_num*100/option.result_all_num).toFixed(0)}}% {{option.result_select_num}}人</span></span>
                         <div class="progress">
-                            <div class="progressInner" :style="'width:'+hahaha+'%'">
+                            <div class="progressInner" :style="'width:'+(option.result_select_num*100/option.result_all_num).toFixed(0)+'%'">
 
                             </div>
                         </div>

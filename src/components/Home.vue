@@ -24,7 +24,6 @@ export default {
         params:data
       }).then(res=>{
         var type = res.data.data.exam.type;
-        alert(type)
         var sid = 18;
         if(res.data.data.exam.show_type==1){
           this.$router.push({path:'/alone',query:{type,sid}})
