@@ -6,8 +6,8 @@
                     <span class='num'>{{index+1}}</span><span class='titletext'>{{item.topic_title.title}}</span>
                 </div>
                 <ul class="content">
-                    <li v-for="(option,key) in item.option" :key=key>
-                        <span class='contenttext'>A. {{option.res_option}}<span class='ratio'>{{(option.result_select_num*100/option.result_all_num).toFixed(0)}}% {{option.result_select_num}}人</span></span>
+                    <li v-for="(option,index1,key) in item.option" :key=key>
+                        <span class='contenttext'><span v-if='index1==0'>A. </span><span v-if='index1==1'>B. </span><span v-if='index1==2'>C. </span><span v-if='index1==3'>D. </span><span v-if='index1==4'>E. </span><span v-if='index1==5'>F. </span><span v-if='index1==6'>G. </span><span v-if='index1==7'>H. </span><span v-if='index1==8'>I. </span><span v-if='index1==9'>J. </span><span v-if='index1==10'>K. </span>{{option.res_option}}<span class='ratio'>{{(option.result_select_num*100/option.result_all_num).toFixed(0)}}% {{option.result_select_num}}人</span></span>
                         <div class="progress">
                             <div class="progressInner" :style="'width:'+(option.result_select_num*100/option.result_all_num).toFixed(0)+'%'">
 

@@ -84,7 +84,8 @@ import CopyRight from '@/components/Copyright'
                     sid:this.sid,
                     answer:this.answer
                 }
-                console.log(data)                
+                console.log(data) 
+                window.clearInterval(this.timer)                   
                 this.$axios({
                     methods:'get',
                     url:'http://exam.weilang.top/Dxadmin/Api/ansQuestion',
