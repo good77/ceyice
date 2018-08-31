@@ -17,12 +17,12 @@
                     </div>
                 </div>
                 <p>手机号</p>
-                <input type="text" placeholder="请输入手机号" v-model="phone">
+                <input type="text" placeholder="请输入手机号" v-model="phone" @blur="checkphone">
             </div>
         </div>
-        <div class="send">
+        <router-link tag='div' to="/form" class="send" >
             提交
-        </div>
+        </router-link>
         <copy-right />
     </div>
 </template>
@@ -37,7 +37,21 @@ import CopyRight from '@/components/Copyright'
                 name:'',
                 sex:1,
                 phone:'',
+                res:window.localStorage.getItem('res')
             }
+        },
+        methods:{
+            checkphone(tid,index,type){
+                    var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
+                    if (myreg.test(this.ipttext[index])) {
+                    }else{
+                        alert('请输入正确的手机号')
+                        this.phone=''
+                    }
+            }
+        },
+        mounted(){
+            console.log(this.res)
         }
     }
 </script>

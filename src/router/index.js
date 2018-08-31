@@ -6,6 +6,7 @@ import All from '@/components/All'
 import Result from '@/components/Result'
 import Sign from '@/components/Sign'
 import Vote from '@/components/Vote'
+import Form from '@/components/Form'
 Vue.use(Router)
 
 export default new Router({
@@ -39,6 +40,11 @@ export default new Router({
       path: '/Vote',
       name: 'Vote',
       component: Vote
+    },
+    {
+      path: '/Form',
+      name: 'Form',
+      component: Form
     }
   ]
 })

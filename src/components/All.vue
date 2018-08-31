@@ -7,7 +7,7 @@
                 </div>
                 <ul class="content">
                     <li v-for="(option,index1,key) in item.option" :key=key >
-                        <input :id="'radio'+index+index1"  :name="'radio'+index" type="radio" @click='choice(option.tid,index1+1,item.topic_title.bool_single)' class="demo--radio"/> 
+                        <input :id="'radio'+index+index1" :name="'radio'+index" type="radio" @click='choice(option.tid,index1+1,item.topic_title.bool_single)' class="demo--radio"/> 
                         <label :for="'radio'+index+index1"  class='contenttext demo--label'>{{option.res_option}}</label>
                     </li>
                 </ul>
@@ -44,7 +44,7 @@
                     <span class='num'>{{index+1}}</span><span class='titletext'>{{item.topic_title.title}}</span>
                 </div>
                 <div class="content">
-                    <input type="number" minlength='11' maxlength="11" class="ipttext" @blur='text(item.topic_title.tid,index,item.topic_title.bool_single)' v-model='ipttext[index]' placeholder="请在此输入.." />
+                    <input type="number" minlength='11' maxlength="11" class="ipttext" @blur='phone(item.topic_title.tid,index,item.topic_title.bool_single)' v-model='ipttext[index]' placeholder="请在此输入.." />
                 </div>
             </div>
             <div class="email"  v-if='item.topic_title.bool_single==6'>
@@ -52,7 +52,7 @@
                     <span class='num'>{{index+1}}</span><span class='titletext'>{{item.topic_title.title}}</span>
                 </div>
                 <div class="content">
-                    <input type="email" class="ipttext" @blur="text(item.topic_title.tid,index,item.topic_title.bool_single)"  v-model='ipttext[index]' placeholder="请在此输入.." />
+                    <input type="email" class="ipttext" @blur="email(item.topic_title.tid,index,item.topic_title.bool_single)"  v-model='ipttext[index]' placeholder="请在此输入.." />
                 </div>
             </div>
         </div>
@@ -80,28 +80,52 @@ import CopyRight from '@/components/Copyright'
         },
         methods:{
             send(){
-                var data = {
-                    sid:this.sid,
-                    answer:this.answer
+                var flag=1;
+                for(var i in this.item){
+                    if(this.item[i].topic_title.bool_topic==1){
+                        if(this.answer.length<1){
+                            flag=0;
+                            alert('题目还没答完呢');
+                            break;
+                        }
+                        var sum =0;
+                        for(var j in this.answer){
+                            if(this.answer[j].tid!=this.item[i].topic_title.tid){
+                                sum++;
+                                console.log(sum)
+                            }
+                        }
+                        if(sum==this.answer.length){
+                            flag=0;
+                            alert('题目还没答完呢');
+                            break;
+                        }
+                    }
                 }
-                console.log(data) 
-                window.clearInterval(this.timer)                   
-                this.$axios({
-                    methods:'get',
-                    url:'http://exam.weilang.top/Dxadmin/Api/ansQuestion',
-                    params:data,
-                }).then(res=>{
-                    console.log(res.data)
-                    window.localStorage.setItem('res',JSON.stringify(res.data));
-                })
-                var type = this.$route.query.type 
-                if(type==1){
-                    this.$router.push('/sign')
-                }else if(type==2){
-                    window.localStorage.setItem('time',this.time)
-                    this.$router.push('/result')
-                }else if(type==3){
-                    this.$router.push('/vote')
+                if(flag==1){
+                    var data = {
+                        sid:this.sid,
+                        answer:this.answer
+                    }
+                    console.log(data) 
+                    window.clearInterval(this.timer)                   
+                    this.$axios({
+                        methods:'get',
+                        url:'http://exam.weilang.top/Dxadmin/Api/ansQuestion',
+                        params:data,
+                    }).then(res=>{
+                        console.log(res.data)
+                        window.localStorage.setItem('res',JSON.stringify(res.data));
+                    })
+                    var type = this.$route.query.type 
+                    if(type==1){
+                        this.$router.push('/sign')
+                    }else if(type==2){
+                        window.localStorage.setItem('time',this.time)
+                        this.$router.push('/result')
+                    }else if(type==3){
+                        this.$router.push('/vote')
+                    }
                 }
             },
             choice(tid,num,type){
@@ -169,6 +193,52 @@ import CopyRight from '@/components/Copyright'
                     this.answer.push(item);
                 }
                 console.log(this.answer)
+            },
+            email(tid,index,type){
+               var myreg=/[a-zA-Z0-9]{1,10}@[a-zA-Z0-9]{1,5}\.[a-zA-Z0-9]{1,5}/;
+                    if (!myreg.test(this.ipttext[index])) {
+                        var flag=1
+                        var item = {
+                            tid:tid,
+                            type:type,
+                            num:this.ipttext[index]
+                        }
+                        for(var i in this.answer){
+                            if(this.answer[i].tid==tid){
+                                this.answer.splice(i,1,item);
+                                flag=0;
+                            }
+                        }
+                        if(flag==1){
+                            this.answer.push(item);
+                        }
+                        console.log(this.answer)
+                    }else{
+                        alert('请输入正确的邮箱')
+                    }
+            },
+            phone(tid,index,type){
+                    var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
+                    if (!myreg.test(this.ipttext[index])) {
+                        var flag=1
+                        var item = {
+                            tid:tid,
+                            type:type,
+                            num:this.ipttext[index]
+                        }
+                        for(var i in this.answer){
+                            if(this.answer[i].tid==tid){
+                                this.answer.splice(i,1,item);
+                                flag=0;
+                            }
+                        }
+                        if(flag==1){
+                            this.answer.push(item);
+                        }
+                        console.log(this.answer)
+                    }else{
+                        alert('请输入正确的手机号')
+                    }
             }
         },
         mounted(){
