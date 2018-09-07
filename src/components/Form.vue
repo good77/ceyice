@@ -7,16 +7,16 @@
 </template>
 <script>
     export default{
-        data(){
-            return {
-                res:window.localStorage.getItem('res')
+        computed:{
+            res:function(){
+                return this.$store.state.res
             }
-        }
+        },
     }
 </script>
 <style lang="less" scoped>
-.cotent{
-    padding:.3rem;
+.content{
+    padding:.2rem;
 }
 </style>
 

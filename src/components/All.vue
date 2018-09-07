@@ -7,7 +7,7 @@
                 </div>
                 <ul class="content">
                     <li v-for="(option,index1,key) in item.option" :key=key >
-                        <input :id="'radio'+index+index1" :name="'radio'+index" type="radio" @click='choice(option.tid,index1+1,item.topic_title.bool_single)' class="demo--radio"/> 
+                        <input :id="'radio'+index+index1"   :checked="option.bool_defalse==1"  :name="'radio'+index" type="radio" @click='choice(option.tid,index1+1,item.topic_title.bool_single)' class="demo--radio"/> 
                         <label :for="'radio'+index+index1"  class='contenttext demo--label'>{{option.res_option}}</label>
                     </li>
                 </ul>
@@ -18,8 +18,8 @@
                 </div>
                 <ul class="content">
                     <li v-for="(option,index1,key) in item.option" :key=key>
-                        <input :id="'radio'+index+index1"  :name="'radio'+index" type="checkbox" @click='choices(option.tid,index1+1,item.topic_title.bool_single)' class="demo--radio1"/> 
-                        <label :for="'radio'+index+index1"  class='contenttext demo--label1'>{{option.res_option}}</label>
+                        <input :id="'radio'+index+index1" :checked="option.bool_defalse==1"  :name="'radio'+index" type="checkbox" @click='choices(option.tid,index1+1,item.topic_title.bool_single)' class="demo--radio1"/> 
+                        <label :for="'radio'+index+index1"  class='contenttext demo--label1' >{{option.res_option}}</label>
                     </li>
                 </ul>
             </div>
@@ -45,6 +45,9 @@
                 </div>
                 <div class="content">
                     <input type="number" minlength='11' maxlength="11" class="ipttext" @blur='phone(item.topic_title.tid,index,item.topic_title.bool_single)' v-model='ipttext[index]' placeholder="请在此输入.." />
+                </div>
+                <div class="checkcode" v-if="item.topic_title.bool_check">
+                    <input type="number" class="codeipt" placeholder="请在此输入.." v-model="checkcode"/><button class='codebtn' @click='getcode' :disabled="disabled">{{codebtn}}</button>
                 </div>
             </div>
             <div class="email"  v-if='item.topic_title.bool_single==6'>
@@ -73,12 +76,48 @@ import CopyRight from '@/components/Copyright'
                 sid:'',
                 answer:[],
                 ipttext:[],
+                checkcode:'',
+                codebtn:'获取验证码',
+                disabled:false,
+                second:0,
+                tel:''
             }
         },
         components:{
             CopyRight
         },
         methods:{
+            getcode(){
+                if(this.tel){
+                    this.second=60
+                    var timer = window.setInterval(()=>{
+                        if(this.second>0){
+                            this.second--
+                            this.codebtn=this.second+'秒后重试';
+                            this.disabled=true
+                        }else{
+                            this.codebtn="获取验证码";
+                            window.clearInterval(timer);
+                            this.disabled=false
+                        }
+                    },1000)
+                    this.$axios({
+                        method:'get',
+                        url:'http://exam.weilang.top/Dxadmin/Api/checkPhone',
+                        params:{
+                            phoneNum:this.tel,
+                            countryCode:86,
+                            sid:this.sid,
+                            sType:this.$route.query.type
+                        }
+                    }).then(res=>{
+                        console.log(res)
+                    })
+                }
+                else{
+                    alert("您还没有输入手机号")
+                }
+            },
             send(){
                 var flag=1;
                 for(var i in this.item){
@@ -105,7 +144,8 @@ import CopyRight from '@/components/Copyright'
                 if(flag==1){
                     var data = {
                         sid:this.sid,
-                        answer:this.answer
+                        answer:this.answer,
+                        code:this.checkcode
                     }
                     console.log(data) 
                     window.clearInterval(this.timer)                   
@@ -114,12 +154,12 @@ import CopyRight from '@/components/Copyright'
                         url:'http://exam.weilang.top/Dxadmin/Api/ansQuestion',
                         params:data,
                     }).then(res=>{
-                        console.log(res.data)
-                        window.localStorage.setItem('res',JSON.stringify(res.data));
+                        console.log(res)
+                        this.$store.dispatch('getRes',res.data)
                     })
                     var type = this.$route.query.type 
                     if(type==1){
-                        this.$router.push('/sign')
+                        this.$router.push('/form')
                     }else if(type==2){
                         window.localStorage.setItem('time',this.time)
                         this.$router.push('/result')
@@ -196,7 +236,7 @@ import CopyRight from '@/components/Copyright'
             },
             email(tid,index,type){
                var myreg=/[a-zA-Z0-9]{1,10}@[a-zA-Z0-9]{1,5}\.[a-zA-Z0-9]{1,5}/;
-                    if (!myreg.test(this.ipttext[index])) {
+                    if (myreg.test(this.ipttext[index])) {
                         var flag=1
                         var item = {
                             tid:tid,
@@ -218,8 +258,9 @@ import CopyRight from '@/components/Copyright'
                     }
             },
             phone(tid,index,type){
+                    this.tel=this.ipttext[index];
                     var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
-                    if (!myreg.test(this.ipttext[index])) {
+                    if (myreg.test(this.ipttext[index])) {
                         var flag=1
                         var item = {
                             tid:tid,
@@ -256,6 +297,36 @@ import CopyRight from '@/components/Copyright'
             }).then(res=>{
                 console.log(res.data.data.item)
                 this.item = res.data.data.item
+                for(var i=0; i<this.item.length;i++){
+                    if(this.item[i].topic_title.bool_single==1){
+                        for(var j = 0 ; j < this.item[i].option.length; j++){
+                            if(this.item[i].option[j].bool_defalse==1){
+                                var item = {
+                                    type:this.item[i].topic_title.bool_single,
+                                    tid:this.item[i].option[j].tid,
+                                    num:j+1
+                                }
+                                this.answer.push(item);
+                                break;
+                            }
+                        }
+                    }else if(this.item[i].topic_title.bool_single==2){
+                        var num = []
+                         for(var j = 0 ; j < this.item[i].option.length; j++){
+                            if(this.item[i].option[j].bool_defalse==1){
+                                num.push(j+1)
+                            }
+                            console.log(num)
+                            var item = {
+                                type:this.item[i].topic_title.bool_single,
+                                tid:this.item[i].option[j].tid,
+                                num
+                            }
+                        }
+                        this.answer.push(item)
+                    }
+                }
+                console.log(this.answer)
             })
         }
     }
@@ -289,6 +360,9 @@ import CopyRight from '@/components/Copyright'
     background:url('../assets/img/Oval_1@2x.png');
     background-size: 100% ;
 }
+.demo--radio:checked+label{
+    color:#7958FF;
+}
 //
 .demo--radio1{
     display:none
@@ -312,6 +386,9 @@ import CopyRight from '@/components/Copyright'
     background:url('../assets/img/tick_1@2x.png');
     background-size: 100% ;
 }
+.demo--radio1:checked+label{
+    color:#7958FF;
+}
 //
 input::placeholder,textarea::placeholder{
     color:#bbb;
@@ -332,8 +409,7 @@ input{
 }
 textarea{
     height: 1.37rem;
-    width: 3.35rem;
-    
+    width: 3.35rem;   
 }
 .all{
     margin-bottom:.8rem;
@@ -379,6 +455,25 @@ textarea{
                     height: 0.2rem;
                     line-height: .2rem;
                 }
+            }
+        }
+         .checkcode{
+            padding:.1rem .1rem;
+            .codeipt{
+                width: 2.37rem;
+            }
+            .codebtn{
+                margin-left:.1rem;
+                font-size: 12px;
+                color: #7958FF;
+                letter-spacing: 0;
+                text-align: center;
+                width: 0.8rem;
+                height: 0.38rem;
+                opacity: 0.8;
+                background: #FFFFFF;
+                border: 1px solid #7958FF;
+                border-radius: 4px;
             }
         }
     }

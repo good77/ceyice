@@ -21,10 +21,9 @@
 </template>
 <script>
     export default{
-        data(){
-            return {
-                hahaha:60,
-                res:JSON.parse(window.localStorage.getItem('res'))
+        computed:{
+            res:function(){
+                return this.$store.state.res
             }
         },
         mounted(){

@@ -15,7 +15,7 @@ export default {
   },
   methods:{
     start(){
-      var sid = this.$route.query.sid;;
+      var sid = this.$route.query.sid;
       var data = {
         sid
       }
@@ -25,8 +25,8 @@ export default {
         params:data
       }).then(res=>{
         var status = res.data.data.exam.status;
-        if(status==1){
-            var type = res.data.data.exam.type;
+        var type = res.data.data.exam.type;
+        if(status==1||type==2){
             if(res.data.data.exam.show_type==1){
               this.$router.push({path:'/alone',query:{type,sid}})
             }else if(res.data.data.exam.show_type==2){

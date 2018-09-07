@@ -29,15 +29,23 @@ import CopyRight from '@/components/Copyright'
                 min:parseInt(window.localStorage.getItem('time')/60),
                 sec:window.localStorage.getItem('time')%60,
                 point:0,
-                res:JSON.parse(window.localStorage.getItem("res"))
+            }
+        },
+        computed:{
+            res(){
+                return this.$store.state.res
             }
         },
         mounted(){
+            this.$store.dispatch('clearRes')
             var timer2 = setInterval(()=>{
-                if(this.point<this.res.score){
-                    this.point ++;
-                }else{
-                    window.clearInterval(timer2);
+                if(this.res.score){
+                    if(this.point<this.res.score){
+                        console.log(this.point+'小于'+this.res.score)
+                        this.point ++;
+                    }else{
+                        window.clearInterval(timer2);
+                    }
                 }
             },5)
         }
