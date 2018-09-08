@@ -8,17 +8,17 @@
 export default {
   name: 'App',
   created(){
-    var type = this.$route.query.sType
-    var show_type = this.$route.query.showType
+    var type = this.$route.query.type
+    var show_type = this.$route.query.show_type
     var sid = this.$route.query.sid
     if(type==1||type==3){
       if(show_type==1){
-          this.$router.push({path:'/alone',query:{type,sid}})
+          this.$router.push({path:'/alone',query:{type,sid,show_type}})
       }else{
-        this.$router.push({path:'/all',query:{type,sid}})
+        this.$router.push({path:'/all',query:{type,sid,show_type}})
       }
     }else{
-      this.$router.push({path:'/home',query:{sid}})
+      this.$router.push({path:'/home',query:{type,sid,show_type}})
     }
   }
 }

@@ -155,17 +155,21 @@ import CopyRight from '@/components/Copyright'
                         params:data,
                     }).then(res=>{
                         console.log(res)
-                        this.$store.dispatch('getRes',res.data)
+                        if(res.data.message){
+                            alert(res.data.message)
+                        }else{
+                            this.$store.dispatch('getRes',res.data)
+                            var type = this.$route.query.type 
+                            if(type==1){
+                                this.$router.push('/form')
+                            }else if(type==2){
+                                window.localStorage.setItem('time',this.time)
+                                this.$router.push('/result')
+                            }else if(type==3){
+                                this.$router.push('/vote')
+                            }
+                        }
                     })
-                    var type = this.$route.query.type 
-                    if(type==1){
-                        this.$router.push('/form')
-                    }else if(type==2){
-                        window.localStorage.setItem('time',this.time)
-                        this.$router.push('/result')
-                    }else if(type==3){
-                        this.$router.push('/vote')
-                    }
                 }
             },
             choice(tid,num,type){
