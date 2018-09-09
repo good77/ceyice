@@ -44,9 +44,9 @@
                     <span class='num'>{{index+1}}</span><span class='titletext'>{{item.topic_title.title}}</span>
                 </div>
                 <div class="content">
-                    <input type="number" minlength='11' maxlength="11" class="ipttext" @blur='phone(item.topic_title.tid,index,item.topic_title.bool_single)' v-model='ipttext[index]' placeholder="请在此输入.." />
+                    <input type="number" minlength='11' maxlength="11" class="ipttext" @blur='phone(item.topic_title.tid,item.topic_title.bool_single)' v-model='tel' placeholder="请在此输入.." />
                 </div>
-                <div class="checkcode" v-if="item.topic_title.bool_check">
+                <div class="checkcode" v-if="item.topic_title.bool_check==1">
                     <input type="number" class="codeipt" placeholder="请在此输入.." v-model="checkcode"/><button class='codebtn' @click='getcode' :disabled="disabled">{{codebtn}}</button>
                 </div>
             </div>
@@ -55,7 +55,7 @@
                     <span class='num'>{{index+1}}</span><span class='titletext'>{{item.topic_title.title}}</span>
                 </div>
                 <div class="content">
-                    <input type="email" class="ipttext" @blur="email(item.topic_title.tid,index,item.topic_title.bool_single)"  v-model='ipttext[index]' placeholder="请在此输入.." />
+                    <input type="email" class="ipttext" @blur="e_mail(item.topic_title.tid,item.topic_title.bool_single)"  v-model='email' placeholder="请在此输入.." />
                 </div>
             </div>
              <div class="form" style="padding:.2rem" v-if='item.topic_title.bool_single==7'>
@@ -83,7 +83,8 @@ import CopyRight from '@/components/Copyright'
                 codebtn:'获取验证码',
                 disabled:false,
                 second:0,
-                tel:''
+                tel:'',
+                email:''
             }
         },
         components:{
@@ -121,58 +122,192 @@ import CopyRight from '@/components/Copyright'
                     alert("您还没有输入手机号")
                 }
             },
-            send(){
-                var flag=1;
-                for(var i in this.item){
-                    if(this.item[i].topic_title.bool_topic==1){
-                        if(this.answer.length<1){
-                            flag=0;
-                            alert('题目还没答完呢');
-                            break;
-                        }
-                        var sum =0;
-                        for(var j in this.answer){
-                            if(this.answer[j].tid!=this.item[i].topic_title.tid){
-                                sum++;
-                                console.log(sum)
+             send(){
+                var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
+                var myreg1=/[a-zA-Z0-9]{1,10}@[a-zA-Z0-9]{1,5}\.[a-zA-Z0-9]{1,5}/;
+                if(this.tel.length>0){
+                    if(myreg.test(this.tel)){
+                        if(this.email.length>0){
+                            if(myreg1.test(this.email)){
+                                 var flag=1;
+                                for(var i in this.item){
+                                    if(this.item[i].topic_title.bool_topic==1){
+                                        if(this.answer.length<1){
+                                            flag=0;
+                                            alert('题目还没答完呢');
+                                            break;
+                                        }
+                                        var sum =0;
+                                        for(var j in this.answer){
+                                            if(this.answer[j].tid!=this.item[i].topic_title.tid){
+                                                sum++;
+                                                console.log(sum)
+                                            }
+                                        }
+                                        if(sum==this.answer.length){
+                                            flag=0;
+                                            alert('题目还没答完呢');
+                                            break;
+                                        }
+                                    }
+                                }
+                                if(flag==1){
+                                    var data = {
+                                        sid:this.sid,
+                                        answer:this.answer,
+                                        code:this.checkcode
+                                    }
+                                    console.log(data) 
+                                    window.clearInterval(this.timer)               
+                                    this.$axios({
+                                        methods:'get',
+                                        url:'http://exam.weilang.top/Dxadmin/Api/ansQuestion',
+                                        params:data,
+                                    }).then(res=>{
+                                        console.log(res.data)
+                                        if(res.data.message){
+                                            alert(res.data.message)
+                                        }else{
+                                            this.$store.dispatch('getRes',res.data)
+                                            var type = this.$route.query.type 
+                                            if(type==1){
+                                                this.$router.push('/form')
+                                            }else if(type==2){
+                                                window.localStorage.setItem('time',this.time)
+                                                this.$router.push('/result')
+                                            }else if(type==3){
+                                                this.$router.push('/vote')
+                                            }
+                                        }
+                                    })
+                                
+                                }
+                            }else{
+                                this.email="";
+                                alert("请输入正确的邮箱")
                             }
-                        }
-                        if(sum==this.answer.length){
-                            flag=0;
-                            alert('题目还没答完呢');
-                            break;
-                        }
-                    }
-                }
-                if(flag==1){
-                    var data = {
-                        sid:this.sid,
-                        answer:this.answer,
-                        code:this.checkcode
-                    }
-                    console.log(data) 
-                    window.clearInterval(this.timer)                   
-                    this.$axios({
-                        methods:'get',
-                        url:'http://exam.weilang.top/Dxadmin/Api/ansQuestion',
-                        params:data,
-                    }).then(res=>{
-                        console.log(res)
-                        if(res.data.message){
-                            alert(res.data.message)
                         }else{
-                            this.$store.dispatch('getRes',res.data)
-                            var type = this.$route.query.type 
-                            if(type==1){
-                                this.$router.push('/form')
-                            }else if(type==2){
-                                window.localStorage.setItem('time',this.time)
-                                this.$router.push('/result')
-                            }else if(type==3){
-                                this.$router.push('/vote')
+                             var flag=1;
+                            for(var i in this.item){
+                                if(this.item[i].topic_title.bool_topic==1){
+                                    if(this.answer.length<1){
+                                        flag=0;
+                                        alert('题目还没答完呢');
+                                        break;
+                                    }
+                                    var sum =0;
+                                    for(var j in this.answer){
+                                        if(this.answer[j].tid!=this.item[i].topic_title.tid){
+                                            sum++;
+                                            console.log(sum)
+                                        }
+                                    }
+                                    if(sum==this.answer.length){
+                                        flag=0;
+                                        alert('题目还没答完呢');
+                                        break;
+                                    }
+                                }
+                            }
+                            if(flag==1){
+                                var data = {
+                                    sid:this.sid,
+                                    answer:this.answer,
+                                    code:this.checkcode
+                                }
+                                console.log(data) 
+                                window.clearInterval(this.timer)               
+                                this.$axios({
+                                    methods:'get',
+                                    url:'http://exam.weilang.top/Dxadmin/Api/ansQuestion',
+                                    params:data,
+                                }).then(res=>{
+                                    console.log(res.data)
+                                    if(res.data.message){
+                                        alert(res.data.message)
+                                    }else{
+                                        this.$store.dispatch('getRes',res.data)
+                                        var type = this.$route.query.type 
+                                        if(type==1){
+                                            this.$router.push('/form')
+                                        }else if(type==2){
+                                            window.localStorage.setItem('time',this.time)
+                                            this.$router.push('/result')
+                                        }else if(type==3){
+                                            this.$router.push('/vote')
+                                        }
+                                    }
+                                })
+                            
                             }
                         }
-                    })
+                    }else{
+                        this.tel='';
+                        alert("请输入正确的手机号")
+                    }
+                }else{
+                    if(this.email.length>0){
+                            if(myreg1.test(this.email)){
+                               
+                            }else{
+                                this.email = "";
+                                alert("请输入正确的邮箱")
+                            }
+                    }else{
+                         var flag=1;
+                        for(var i in this.item){
+                            if(this.item[i].topic_title.bool_topic==1){
+                                if(this.answer.length<1){
+                                    flag=0;
+                                    alert('题目还没答完呢');
+                                    break;
+                                }
+                                var sum =0;
+                                for(var j in this.answer){
+                                    if(this.answer[j].tid!=this.item[i].topic_title.tid){
+                                        sum++;
+                                        console.log(sum)
+                                    }
+                                }
+                                if(sum==this.answer.length){
+                                    flag=0;
+                                    alert('题目还没答完呢');
+                                    break;
+                                }
+                            }
+                        }
+                        if(flag==1){
+                            var data = {
+                                sid:this.sid,
+                                answer:this.answer,
+                                code:this.checkcode
+                            }
+                            console.log(data) 
+                            window.clearInterval(this.timer)               
+                            this.$axios({
+                                methods:'get',
+                                url:'http://exam.weilang.top/Dxadmin/Api/ansQuestion',
+                                params:data,
+                            }).then(res=>{
+                                console.log(res.data)
+                                if(res.data.message){
+                                    alert(res.data.message)
+                                }else{
+                                    this.$store.dispatch('getRes',res.data)
+                                    var type = this.$route.query.type 
+                                    if(type==1){
+                                        this.$router.push('/form')
+                                    }else if(type==2){
+                                        window.localStorage.setItem('time',this.time)
+                                        this.$router.push('/result')
+                                    }else if(type==3){
+                                        this.$router.push('/vote')
+                                    }
+                                }
+                            })
+                        
+                        }
+                    }
                 }
             },
             choice(tid,num,type){
@@ -224,31 +359,32 @@ import CopyRight from '@/components/Copyright'
                 console.log(this.answer)
             },
             text(tid,index,type){
-                 var flag=1
-                var item = {
-                    tid:tid,
-                    type:type,
-                    num:this.ipttext[index]
-                }
-                for(var i in this.answer){
-                    if(this.answer[i].tid==tid){
-                        this.answer.splice(i,1,item);
-                        flag=0;
+                if(this.ipttext[index].length>0){
+                     var flag=1
+                    var item = {
+                        tid:tid,
+                        type:type,
+                        num:this.ipttext[index]
+                    }
+                    for(var i in this.answer){
+                        if(this.answer[i].tid==tid){
+                            this.answer.splice(i,1,item);
+                            flag=0;
+                        }
+                    }
+                    if(flag==1){
+                        this.answer.push(item);
                     }
                 }
-                if(flag==1){
-                    this.answer.push(item);
-                }
-                console.log(this.answer)
             },
-            email(tid,index,type){
+            e_mail(tid,type){
                var myreg=/[a-zA-Z0-9]{1,10}@[a-zA-Z0-9]{1,5}\.[a-zA-Z0-9]{1,5}/;
-                    if (myreg.test(this.ipttext[index])) {
+                    if (myreg.test(this.email)) {
                         var flag=1
                         var item = {
                             tid:tid,
                             type:type,
-                            num:this.ipttext[index]
+                            num:this.email
                         }
                         for(var i in this.answer){
                             if(this.answer[i].tid==tid){
@@ -264,15 +400,15 @@ import CopyRight from '@/components/Copyright'
                         alert('请输入正确的邮箱')
                     }
             },
-            phone(tid,index,type){
-                    this.tel=this.ipttext[index];
+            phone(tid,type){
+                    
                     var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
-                    if (myreg.test(this.ipttext[index])) {
+                    if (myreg.test(this.tel)) {
                         var flag=1
                         var item = {
                             tid:tid,
                             type:type,
-                            num:this.ipttext[index]
+                            num:this.tel
                         }
                         for(var i in this.answer){
                             if(this.answer[i].tid==tid){
