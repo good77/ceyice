@@ -17,8 +17,11 @@ export default {
         url:'http://exam.weilang.top/Dxadmin/Api/measurementAPI',
         params:data
       }).then(res=>{
+        console.log(res.data.data)
         var status = res.data.data.exam.status;
         var type = res.data.data.exam.type;
+        var title = res.data.data.exam.title;
+        document.title = title;
         if(status==1){
             if(type==2){
               this.$router.push({path:'/home',query:{type,sid}})

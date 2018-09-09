@@ -58,6 +58,9 @@
                     <input type="email" class="ipttext" @blur="email(item.topic_title.tid,index,item.topic_title.bool_single)"  v-model='ipttext[index]' placeholder="请在此输入.." />
                 </div>
             </div>
+             <div class="form" style="padding:.2rem" v-if='item.topic_title.bool_single==7'>
+                <div v-html="item.topic_title.content"></div>
+            </div>
         </div>
         <div class="send" @click='send'>
             提交
