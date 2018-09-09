@@ -17,7 +17,6 @@ export default {
     start(){
       var sid = this.$route.query.sid;
       var type = this.$route.query.type;
-      var show_type = this.$route.query.show_type
       var data = {
         sid
       }
@@ -26,13 +25,10 @@ export default {
         url:'http://exam.weilang.top/Dxadmin/Api/measurementAPI',
         params:data
       }).then(res=>{
-        var status = res.data.data.exam.status;
-        if(status==1||type==2){
-            if(res.data.data.exam.show_type==1){
-              this.$router.push({path:'/alone',query:{type,sid,show_type}})
-            }else if(res.data.data.exam.show_type==2){
-              this.$router.push({path:'/all',query:{type,sid,show_type}})
-            }
+        if(res.data.data.exam.show_type==1){
+          this.$router.push({path:'/alone',query:{type,sid}})
+        }else if(res.data.data.exam.show_type==2){
+          this.$router.push({path:'/all',query:{type,sid}})
         }
       })
     }

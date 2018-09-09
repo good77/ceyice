@@ -8,18 +8,32 @@
 export default {
   name: 'App',
   created(){
-    var type = this.$route.query.type
-    var show_type = this.$route.query.show_type
-    var sid = this.$route.query.sid
-    if(type==1||type==3){
-      if(show_type==1){
-          this.$router.push({path:'/alone',query:{type,sid,show_type}})
-      }else{
-        this.$router.push({path:'/all',query:{type,sid,show_type}})
+     var sid = this.$route.query.sid;
+      var data = {
+        sid
       }
-    }else{
-      this.$router.push({path:'/home',query:{type,sid,show_type}})
-    }
+      this.$axios({
+        method:'get',
+        url:'http://exam.weilang.top/Dxadmin/Api/measurementAPI',
+        params:data
+      }).then(res=>{
+        var status = res.data.data.exam.status;
+        var type = res.data.data.exam.type;
+        if(status==1){
+            if(type==2){
+              this.$router.push({path:'/home',query:{type,sid}})
+            }
+            else{
+              if(res.data.data.exam.show_type==1){
+                this.$router.push({path:'/alone',query:{type,sid}})
+              }else if(res.data.data.exam.show_type==2){
+                this.$router.push({path:'/all',query:{type,sid}})
+              }
+            }
+        }else{
+          alert("试卷暂未开放")
+        }
+      })
   }
 }
 </script>
