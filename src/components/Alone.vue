@@ -11,7 +11,7 @@
             <div class="bgbox2"></div>
             <div class="choice" v-if='item.topic_title.bool_single==1'>
                 <div class="title">
-                     <span class='titletext'>{{index+1}}.{{item.topic_title.title}}</span>
+                     <span class='titletext'><span v-if='item.topic_title.bool_topic' style='color:#f00'>*</span>{{index+1}}.{{item.topic_title.title}}</span>
                 </div>
                 <ul class="content">
                     <li v-for="(option,index1,key) in item.option" :key=key >
@@ -22,7 +22,7 @@
             </div>
              <div class="choices" v-if='item.topic_title.bool_single==2'>
                 <div class="title">
-                     <span class='titletext'>{{index+1}}.{{item.topic_title.title}}</span>
+                     <span class='titletext'><span v-if='item.topic_title.bool_topic' style='color:#f00'>*</span>{{index+1}}.{{item.topic_title.title}}</span>
                 </div>
                 <ul class="content">
                     <li v-for="(option,index1,key) in item.option" :key=key>
@@ -33,7 +33,7 @@
             </div>
             <div class="fill" v-if='item.topic_title.bool_single==3'>
                 <div class="title">
-                    <span class='titletext'>{{index+1}}.{{item.topic_title.title}}</span>
+                    <span class='titletext'><span v-if='item.topic_title.bool_topic' style='color:#f00'>*</span>{{index+1}}.{{item.topic_title.title}}</span>
                 </div>
                 <div class="content">
                     <input type="text" class="ipttext"  @blur="text(item.topic_title.tid,index,item.topic_title.bool_single)"  v-model='ipttext[index]'  placeholder="请在此输入.." >
@@ -41,7 +41,7 @@
             </div>
             <div class="fills"  v-if='item.topic_title.bool_single==4'>
                 <div class="title">
-                   <span class='titletext'>{{index+1}}.{{item.topic_title.title}}</span>
+                   <span class='titletext'><span v-if='item.topic_title.bool_topic' style='color:#f00'>*</span>{{index+1}}.{{item.topic_title.title}}</span>
                 </div>
                 <div class="content">
                     <textarea type="text" class="ipttext"  @blur="text(item.topic_title.tid,index,item.topic_title.bool_single)"  v-model='ipttext[index]'  placeholder="请在此输入.." />
@@ -49,7 +49,7 @@
             </div>
             <div class="phone"  v-if='item.topic_title.bool_single==5'>
                 <div class="title">
-                    <span class='titletext'>{{index+1}}.{{item.topic_title.title}}</span>
+                    <span class='titletext'><span v-if='item.topic_title.bool_topic' style='color:#f00'>*</span>{{index+1}}.{{item.topic_title.title}}</span>
                 </div>
                 <div class="content">
                     <input type="number" minlength='11' maxlength="11" class="ipttext" @blur='phone(item.topic_title.tid,index,item.topic_title.bool_single)' v-model='tel' placeholder="请在此输入.." />
@@ -60,7 +60,7 @@
             </div>
             <div class="email"  v-if='item.topic_title.bool_single==6'>
                 <div class="title">
-                     <span class='titletext'>{{index+1}}.{{item.topic_title.title}}</span>
+                     <span class='titletext'><span v-if='item.topic_title.bool_topic' style='color:#f00'>*</span>{{index+1}}.{{item.topic_title.title}}</span>
                 </div>
                 <div class="content">
                     <input type="email" class="ipttext" @blur="e_mail(item.topic_title.tid,item.topic_title.bool_single)"  v-model='email' placeholder="请在此输入.." />
@@ -143,7 +143,7 @@
                     this.flag--;
                 }
             },
-                         send(){
+            send(){
                 var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
                 var myreg1=/[a-zA-Z0-9]{1,10}@[a-zA-Z0-9]{1,5}\.[a-zA-Z0-9]{1,5}/;
                 if(this.tel.length>0){
@@ -176,7 +176,8 @@
                                     var data = {
                                         sid:this.sid,
                                         answer:this.answer,
-                                        code:this.checkcode
+                                        code:this.checkcode,
+                                        phone:this.tel
                                     }
                                     console.log(data) 
                                     window.clearInterval(this.timer)               
@@ -234,7 +235,8 @@
                                 var data = {
                                     sid:this.sid,
                                     answer:this.answer,
-                                    code:this.checkcode
+                                    code:this.checkcode,
+                                    phone:this.tel
                                 }
                                 console.log(data) 
                                 window.clearInterval(this.timer)               
@@ -301,7 +303,8 @@
                             var data = {
                                 sid:this.sid,
                                 answer:this.answer,
-                                code:this.checkcode
+                                code:this.checkcode,
+                                phone:this.tel
                             }
                             console.log(data) 
                             window.clearInterval(this.timer)               

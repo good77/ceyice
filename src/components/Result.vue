@@ -4,13 +4,16 @@
             <img src="../assets/img/icon_time@2x.png" alt=""><span class='timetext'>用时{{min}}'{{sec}}''</span>
         </div>
         <div class="point">
-            <span class='pointtext'>{{point}}</span>
+            <span class='pointtext'>{{Math.round(res.score)}}</span>
             <div class="point2">
                 
             </div>
             <div class="point3">
                     
             </div>
+        </div>
+        <div class="lastchild">
+            {{res.levelContent}}
         </div>
         <div class="share">
             分享给好友
@@ -28,31 +31,28 @@ import CopyRight from '@/components/Copyright'
             return {
                 min:parseInt(window.localStorage.getItem('time')/60),
                 sec:window.localStorage.getItem('time')%60,
-                point:0,
             }
         },
         computed:{
             res(){
                 return this.$store.state.res
             }
-        },
-        mounted(){
-            this.$store.dispatch('clearRes')
-            var timer2 = setInterval(()=>{
-                if(this.res.score){
-                    if(this.point<this.res.score){
-                        console.log(this.point+'小于'+this.res.score)
-                        this.point ++;
-                    }else{
-                        window.clearInterval(timer2);
-                    }
-                }
-            },5)
         }
     }
 </script>
 <style lang="less" scoped>
 .result{
+    .lastchild{
+        text-align: center;
+        width: 2.75rem;
+        background-color: #fff;
+        border-radius:.08rem;
+        box-shadow: 0 .02rem .06rem 0 rgba(0,0,0,0.16);
+        padding:.2rem;
+        box-sizing: border-box;
+        margin:auto;
+        margin-top:.8rem;
+    }
     background: url('../assets/img/bg_bl@2x.png') no-repeat;
     background-position:bottom left;
     background-size:100%;
@@ -64,6 +64,7 @@ import CopyRight from '@/components/Copyright'
         width: 1.3rem; 
         height: 0.2rem;
         line-height: .2rem;
+        margin-bottom: .2rem;
         img{
             width: 0.17rem;
             vertical-align: middle
@@ -125,7 +126,7 @@ import CopyRight from '@/components/Copyright'
         text-align: center;
         color:#fff;
         margin:auto;
-        margin-top:1.4rem;
+        margin-top:.4rem;
     }
 }
 </style>

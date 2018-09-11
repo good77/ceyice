@@ -1,5 +1,8 @@
 <template>
     <div class="all">
+        <div class='item' v-html="res.fabuUedits[0].content" style='padding:.2rem;box-sizing:border-box'>
+
+        </div>
         <div class='item'  v-for="(item,index,key) in res.vote" :key="key">
             <div class="choice" v-if="item.topic_title.bool_single==1||item.topic_title.bool_single==2">
                 <div class="title">
@@ -16,6 +19,9 @@
                     </li>
                 </ul>
             </div>
+        </div>
+        <div class='item' v-html="res.fabuUedits[1].content" style='padding:.2rem;box-sizing:border-box'>
+
         </div>
     </div>
 </template>

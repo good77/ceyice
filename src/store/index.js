@@ -12,15 +12,12 @@ const store = new Vuex.Store({
     setRes(state,data){
         console.log(data.score)
         state.res=data
-    }
+    },
   },
   actions:{
     getRes(context,data){
         context.commit('setRes',data)
     },
-    clearRes(context){
-        context.commit('setRes','')
-    }
   }
 })
 
