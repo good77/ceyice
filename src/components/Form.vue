@@ -16,7 +16,11 @@
 </script>
 <style lang="less" scoped>
 .content{
-    padding:.2rem;
+    margin:.2rem;
+    overflow: hidden!important;
+    img{
+        width:100%!important;
+    }
 }
 </style>
 

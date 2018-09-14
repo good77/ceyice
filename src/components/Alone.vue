@@ -11,48 +11,48 @@
             <div class="bgbox2"></div>
             <div class="choice" v-if='item.topic_title.bool_single==1'>
                 <div class="title">
-                     <span class='titletext'><span v-if='item.topic_title.bool_topic' style='color:#f00'>*</span>{{index+1}}.{{item.topic_title.title}}</span>
+                     <span class='titletext'><span v-if='item.topic_title.bool_topic==1' style='color:#f00'>*</span>{{index+1}}.{{item.topic_title.title}}</span>
                 </div>
                 <ul class="content">
                     <li v-for="(option,index1,key) in item.option" :key=key >
-                        <input :id="'radio'+index+index1" :name="'radio'+index" type="radio" @click='choice(option.tid,index1+1,item.topic_title.bool_single)' class="demo--radio" :checked="option.bool_defalse==1" /> 
+                        <input :id="'radio'+index+index1" :name="'radio'+index" type="radio" @click='choice(option.tid,index1+1,item.topic_title.bool_single,index,index1)' class="demo--radio" :checked="option.bool_defalse==1" /> 
                         <label :for="'radio'+index+index1" class='contenttext demo--label'>{{option.res_option}}</label>
                     </li>
                 </ul>
             </div>
              <div class="choices" v-if='item.topic_title.bool_single==2'>
                 <div class="title">
-                     <span class='titletext'><span v-if='item.topic_title.bool_topic' style='color:#f00'>*</span>{{index+1}}.{{item.topic_title.title}}</span>
+                     <span class='titletext'><span v-if='item.topic_title.bool_topic==1' style='color:#f00'>*</span>{{index+1}}.{{item.topic_title.title}}</span>
                 </div>
                 <ul class="content">
                     <li v-for="(option,index1,key) in item.option" :key=key>
-                        <input :id="'radio'+index+index1" :checked="option.bool_defalse==1"   :name="'radio'+index" type="checkbox" @click='choices(option.tid,index1+1,item.topic_title.bool_single)' class="demo--radio1"/> 
+                        <input :id="'radio'+index+index1" :checked="option.bool_defalse==1"   :name="'radio'+index" type="checkbox" @click='choices(option.tid,index1+1,item.topic_title.bool_single,index,index1)' class="demo--radio1"/> 
                         <label :for="'radio'+index+index1"  class='contenttext demo--label1'>{{option.res_option}}</label>
                     </li>
                 </ul>
             </div>
             <div class="fill" v-if='item.topic_title.bool_single==3'>
                 <div class="title">
-                    <span class='titletext'><span v-if='item.topic_title.bool_topic' style='color:#f00'>*</span>{{index+1}}.{{item.topic_title.title}}</span>
+                    <span class='titletext'><span v-if='item.topic_title.bool_topic==1' style='color:#f00'>*</span>{{index+1}}.{{item.topic_title.title}}</span>
                 </div>
                 <div class="content">
-                    <input type="text" class="ipttext"  @blur="text(item.topic_title.tid,index,item.topic_title.bool_single)"  v-model='ipttext[index]'  placeholder="请在此输入.." >
+                    <input type="text" class="ipttext"  @change="text(item.topic_title.tid,index,item.topic_title.bool_single)"  v-model='ipttext[index]'  placeholder="请在此输入.." >
                 </div>
             </div>
             <div class="fills"  v-if='item.topic_title.bool_single==4'>
                 <div class="title">
-                   <span class='titletext'><span v-if='item.topic_title.bool_topic' style='color:#f00'>*</span>{{index+1}}.{{item.topic_title.title}}</span>
+                   <span class='titletext'><span v-if='item.topic_title.bool_topic==1' style='color:#f00'>*</span>{{index+1}}.{{item.topic_title.title}}</span>
                 </div>
                 <div class="content">
-                    <textarea type="text" class="ipttext"  @blur="text(item.topic_title.tid,index,item.topic_title.bool_single)"  v-model='ipttext[index]'  placeholder="请在此输入.." />
+                    <textarea type="text" class="ipttext"  @change="text(item.topic_title.tid,index,item.topic_title.bool_single)"  v-model='ipttext[index]'  placeholder="请在此输入.." />
                 </div>
             </div>
             <div class="phone"  v-if='item.topic_title.bool_single==5'>
                 <div class="title">
-                    <span class='titletext'><span v-if='item.topic_title.bool_topic' style='color:#f00'>*</span>{{index+1}}.{{item.topic_title.title}}</span>
+                    <span class='titletext'><span v-if='item.topic_title.bool_topic==1' style='color:#f00'>*</span>{{index+1}}.{{item.topic_title.title}}</span>
                 </div>
                 <div class="content">
-                    <input type="number" minlength='11' maxlength="11" class="ipttext" @blur='phone(item.topic_title.tid,index,item.topic_title.bool_single)' v-model='tel' placeholder="请在此输入.." />
+                    <input type="number" minlength='11' maxlength="11" class="ipttext" @change='phone(item.topic_title.tid,index,item.topic_title.bool_single)' v-model='tel' placeholder="请在此输入.." />
                 </div>
                 <div class="checkcode" v-if="item.topic_title.bool_check==1">
                     <input type="number" class="codeipt" placeholder="请在此输入.." v-model="checkcode"/><button class='codebtn' @click='getcode' :disabled="disabled">{{codebtn}}</button>
@@ -60,10 +60,10 @@
             </div>
             <div class="email"  v-if='item.topic_title.bool_single==6'>
                 <div class="title">
-                     <span class='titletext'><span v-if='item.topic_title.bool_topic' style='color:#f00'>*</span>{{index+1}}.{{item.topic_title.title}}</span>
+                     <span class='titletext'><span v-if='item.topic_title.bool_topic==1' style='color:#f00'>*</span>{{index+1}}.{{item.topic_title.title}}</span>
                 </div>
                 <div class="content">
-                    <input type="email" class="ipttext" @blur="e_mail(item.topic_title.tid,item.topic_title.bool_single)"  v-model='email' placeholder="请在此输入.." />
+                    <input type="email" class="ipttext" @change="e_mail(item.topic_title.tid,item.topic_title.bool_single)"  v-model='email' placeholder="请在此输入.." />
                 </div>
             </div>
         </div>
@@ -99,7 +99,9 @@
                 disabled:false,
                 second:0,
                 tel:'',
-                email:''
+                email:'',
+                hasChecked:1,
+                boolCheck:0
             }
         },
         methods:{
@@ -127,30 +129,94 @@
                             sType:this.$route.query.type
                         }
                     }).then(res=>{
-                        console.log(res)
+                        if(res.data.status==-1){
+                            alert(res.data.message)
+                        }
                     })
                 }else{
                     alert("您还没有输入手机号")
                 }
             },
             next(){
-                if(this.flag<this.item.length-1){
+                if(this.flag<this.item.length-1&&this.hasChecked==1){
                     this.flag++;
                 }
             },
             pre(){
                 if(this.flag>0){
+                    this.hasChecked=1;
                     this.flag--;
                 }
             },
             send(){
-                var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
-                var myreg1=/[a-zA-Z0-9]{1,10}@[a-zA-Z0-9]{1,5}\.[a-zA-Z0-9]{1,5}/;
-                if(this.tel.length>0){
-                    if(myreg.test(this.tel)){
-                        if(this.email.length>0){
-                            if(myreg1.test(this.email)){
-                                 var flag=1;
+                if(this.hasChecked==1){
+                    var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
+                    var myreg1=/[a-zA-Z0-9]{1,10}@[a-zA-Z0-9]{1,5}\.[a-zA-Z0-9]{1,5}/;
+                    if(this.tel.length>0){
+                        if(myreg.test(this.tel)){
+                            if(this.email.length>0){
+                                if(myreg1.test(this.email)){
+                                    var flag=1;
+                                    for(var i in this.item){
+                                        if(this.item[i].topic_title.bool_topic==1){
+                                            if(this.answer.length<1){
+                                                flag=0;
+                                                alert('题目还没答完呢');
+                                                break;
+                                            }
+                                            var sum =0;
+                                            for(var j in this.answer){
+                                                if(this.answer[j].tid!=this.item[i].topic_title.tid){
+                                                    sum++;
+                                                    console.log(sum)
+                                                }
+                                            }
+                                            if(sum==this.answer.length){
+                                                flag=0;
+                                                alert('题目还没答完呢');
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    if(flag==1){
+                                        var data = {
+                                            sid:this.sid,
+                                            answer:this.answer,
+                                            code:this.checkcode,
+                                            phone:this.tel,
+                                            boolCheck:this.boolCheck
+                                        }
+                                        console.log(data) 
+                                        window.clearInterval(this.timer)               
+                                        this.$axios({
+                                            methods:'get',
+                                            url:'http://exam.weilang.top/Dxadmin/Api/ansQuestion',
+                                            params:data,
+                                        }).then(res=>{
+                                            console.log(res.data)
+                                            if(res.data.message){
+                                                alert(res.data.message)
+                                            }else{
+                                                this.$store.dispatch('getRes',res.data)
+                                                var type = this.$route.query.type 
+                                                if(type==1){
+                                                    this.$router.push({path:'/form',query:{sid:this.sid}})
+                                                }else if(type==2){
+                                                    window.localStorage.setItem('time',this.time)
+                                                    this.$router.push({path:'/result',query:{sid:this.sid}})
+                                                }else if(type==3){
+                                                    this.$router.push({path:'/vote',query:{sid:this.sid}})
+                                                }
+                                            }
+                                        })
+                                    
+                                    }
+                                }else{
+                                    this.email="";
+                                    alert("请输入正确的邮箱")
+                                }
+                            }else{
+                                var flag=1;
                                 for(var i in this.item){
                                     if(this.item[i].topic_title.bool_topic==1){
                                         if(this.answer.length<1){
@@ -177,7 +243,8 @@
                                         sid:this.sid,
                                         answer:this.answer,
                                         code:this.checkcode,
-                                        phone:this.tel
+                                        phone:this.tel,
+                                        boolCheck:this.boolCheck
                                     }
                                     console.log(data) 
                                     window.clearInterval(this.timer)               
@@ -193,23 +260,86 @@
                                             this.$store.dispatch('getRes',res.data)
                                             var type = this.$route.query.type 
                                             if(type==1){
-                                                this.$router.push('/form')
-                                            }else if(type==2){
-                                                window.localStorage.setItem('time',this.time)
-                                                this.$router.push('/result')
-                                            }else if(type==3){
-                                                this.$router.push('/vote')
-                                            }
+                                                    this.$router.push({path:'/form',query:{sid:this.sid}})
+                                                }else if(type==2){
+                                                    window.localStorage.setItem('time',this.time)
+                                                    this.$router.push({path:'/result',query:{sid:this.sid}})
+                                                }else if(type==3){
+                                                    this.$router.push({path:'/vote',query:{sid:this.sid}})
+                                                }
                                         }
                                     })
                                 
                                 }
-                            }else{
-                                this.email="";
-                                alert("请输入正确的邮箱")
                             }
                         }else{
-                             var flag=1;
+                            this.tel='';
+                            alert("请输入正确的手机号")
+                        }
+                    }else{
+                        if(this.email.length>0){
+                                if(myreg1.test(this.email)){
+                                    var flag=1;
+                                    for(var i in this.item){
+                                        if(this.item[i].topic_title.bool_topic==1){
+                                            if(this.answer.length<1){
+                                                flag=0;
+                                                alert('题目还没答完呢');
+                                                break;
+                                            }
+                                            var sum =0;
+                                            for(var j in this.answer){
+                                                if(this.answer[j].tid!=this.item[i].topic_title.tid){
+                                                    sum++;
+                                                    console.log(sum)
+                                                }
+                                            }
+                                            if(sum==this.answer.length){
+                                                flag=0;
+                                                alert('题目还没答完呢');
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    if(flag==1){
+                                        var data = {
+                                            sid:this.sid,
+                                            answer:this.answer,
+                                            code:this.checkcode,
+                                            phone:this.tel,
+                                                boolCheck:this.boolCheck
+                                        }
+                                        console.log(data) 
+                                        window.clearInterval(this.timer)               
+                                        this.$axios({
+                                            methods:'get',
+                                            url:'http://exam.weilang.top/Dxadmin/Api/ansQuestion',
+                                            params:data,
+                                        }).then(res=>{
+                                            console.log(res.data)
+                                            if(res.data.message){
+                                                alert(res.data.message)
+                                            }else{
+                                                this.$store.dispatch('getRes',res.data)
+                                                var type = this.$route.query.type 
+                                            if(type==1){
+                                                            this.$router.push({path:'/form',query:{sid:this.sid}})
+                                                        }else if(type==2){
+                                                            window.localStorage.setItem('time',this.time)
+                                                            this.$router.push({path:'/result',query:{sid:this.sid}})
+                                                        }else if(type==3){
+                                                            this.$router.push({path:'/vote',query:{sid:this.sid}})
+                                                        }
+                                            }
+                                        })
+                                    
+                                    }
+                                }else{
+                                    this.email = "";
+                                    alert("请输入正确的邮箱")
+                                }
+                        }else{
+                            var flag=1;
                             for(var i in this.item){
                                 if(this.item[i].topic_title.bool_topic==1){
                                     if(this.answer.length<1){
@@ -236,7 +366,8 @@
                                     sid:this.sid,
                                     answer:this.answer,
                                     code:this.checkcode,
-                                    phone:this.tel
+                                    phone:this.tel,
+                                        boolCheck:this.boolCheck
                                 }
                                 console.log(data) 
                                 window.clearInterval(this.timer)               
@@ -251,95 +382,36 @@
                                     }else{
                                         this.$store.dispatch('getRes',res.data)
                                         var type = this.$route.query.type 
-                                        if(type==1){
-                                            this.$router.push('/form')
-                                        }else if(type==2){
-                                            window.localStorage.setItem('time',this.time)
-                                            this.$router.push('/result')
-                                        }else if(type==3){
-                                            this.$router.push('/vote')
-                                        }
+                                    if(type==1){
+                                                    this.$router.push({path:'/form',query:{sid:this.sid}})
+                                                }else if(type==2){
+                                                    window.localStorage.setItem('time',this.time)
+                                                    this.$router.push({path:'/result',query:{sid:this.sid}})
+                                                }else if(type==3){
+                                                    this.$router.push({path:'/vote',query:{sid:this.sid}})
+                                                }
                                     }
                                 })
                             
                             }
                         }
-                    }else{
-                        this.tel='';
-                        alert("请输入正确的手机号")
-                    }
-                }else{
-                    if(this.email.length>0){
-                            if(myreg1.test(this.email)){
-                               
-                            }else{
-                                this.email = "";
-                                alert("请输入正确的邮箱")
-                            }
-                    }else{
-                         var flag=1;
-                        for(var i in this.item){
-                            if(this.item[i].topic_title.bool_topic==1){
-                                if(this.answer.length<1){
-                                    flag=0;
-                                    alert('题目还没答完呢');
-                                    break;
-                                }
-                                var sum =0;
-                                for(var j in this.answer){
-                                    if(this.answer[j].tid!=this.item[i].topic_title.tid){
-                                        sum++;
-                                        console.log(sum)
-                                    }
-                                }
-                                if(sum==this.answer.length){
-                                    flag=0;
-                                    alert('题目还没答完呢');
-                                    break;
-                                }
-                            }
-                        }
-                        if(flag==1){
-                            var data = {
-                                sid:this.sid,
-                                answer:this.answer,
-                                code:this.checkcode,
-                                phone:this.tel
-                            }
-                            console.log(data) 
-                            window.clearInterval(this.timer)               
-                            this.$axios({
-                                methods:'get',
-                                url:'http://exam.weilang.top/Dxadmin/Api/ansQuestion',
-                                params:data,
-                            }).then(res=>{
-                                console.log(res.data)
-                                if(res.data.message){
-                                    alert(res.data.message)
-                                }else{
-                                    this.$store.dispatch('getRes',res.data)
-                                    var type = this.$route.query.type 
-                                    if(type==1){
-                                        this.$router.push('/form')
-                                    }else if(type==2){
-                                        window.localStorage.setItem('time',this.time)
-                                        this.$router.push('/result')
-                                    }else if(type==3){
-                                        this.$router.push('/vote')
-                                    }
-                                }
-                            })
-                        
-                        }
                     }
                 }
+            
             },
-            choice(tid,num,type){
+            choice(tid,num,type,index,index1){
                 var flag=1
                 var item = {
                     tid,
                     type,
                     num
+                }
+                for(var i in this.item[index].option){
+                    if(index1==i){
+                        this.item[index].option[i].bool_defalse=1;
+                    }else{
+                        this.item[index].option[i].bool_defalse=0;  
+                    }
                 }
                 for(var i in this.answer){
                     if(this.answer[i].tid==tid){
@@ -352,13 +424,18 @@
                 }
                 console.log(this.answer)
             },
-            choices(tid,num,type){
+            choices(tid,num,type,index,index1){
                 var flag=1;
                 var flagg=1;
                 var item = {
                     tid:tid,
                     type:type,
                     num:[]
+                }
+                 if(this.item[index].option[index1].bool_defalse==0){
+                    this.item[index].option[index1].bool_defalse=1;
+                }else{
+                    this.item[index].option[index1].bool_defalse=0;  
                 }
                 for(var i in this.answer){
                     if(this.answer[i].tid==tid){
@@ -405,6 +482,7 @@
             e_mail(tid,type){
                var myreg=/[a-zA-Z0-9]{1,10}@[a-zA-Z0-9]{1,5}\.[a-zA-Z0-9]{1,5}/;
                     if (myreg.test(this.email)) {
+                        this.hasChecked=1;
                         var flag=1
                         var item = {
                             tid:tid,
@@ -422,12 +500,14 @@
                         }
                         console.log(this.answer)
                     }else{
+                        this.hasChecked=0
                         alert('请输入正确的邮箱')
-                    }
+                    }    
             },
             phone(tid,type){
                     var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
                     if (myreg.test(this.tel)) {
+                        this.hasChecked=1
                         var flag=1
                         var item = {
                             tid:tid,
@@ -445,6 +525,7 @@
                         }
                         console.log(this.answer)
                     }else{
+                        this.hasChecked=0
                         alert('请输入正确的手机号')
                     }
             }
@@ -491,7 +572,23 @@
                             }
                         }
                         this.answer.push(item)
+                    }else if(this.item[i].topic_title.bool_single==3){
+                            if(this.item[i].topic_title.defalse_value){
+                                this.ipttext[i]=this.item[i].topic_title.defalse_value;
+                                console.log(this.ipttext[i])
+                                var item = {
+                                    type:this.item[i].topic_title.bool_single,
+                                    tid:this.item[i].topic_title.tid,
+                                    num:this.item[i].topic_title.defalse_value
+                                }
+                                this.answer.push(item)
+                            }
+                    }else if(this.item[i].topic_title.bool_single==5){
+                            if(this.item[i].topic_title.bool_check==1){
+                                this.boolCheck = 1
+                            }
                     }
+
                 }
                 console.log(this.answer)
             })
