@@ -7,7 +7,8 @@
             <img src="../assets/img/icon_time@2x.png" alt=""><span class='timetext'>用时{{min}}'{{sec}}''</span>
         </div>
         <div class="point">
-            <span class='pointtext'>{{Math.round(res.score)}}</span>
+            <span class='pointtext' style='padding-bottom:2px;text-decoratio:underline;border-bottom:1 solid #fff;'>100'
+            </span>
             <div class="point2">
                 
             </div>

@@ -678,7 +678,6 @@ textarea{
             }
         }
         .title{
-            height: 0.42rem;
             line-height: .42rem;
             background:url('../assets/img/bg_number@2x.png') no-repeat 0 .1rem;
             background-size: .32rem .22rem;
